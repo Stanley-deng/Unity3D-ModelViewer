@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CoverageReport scope="Summary">
+  <Summary>
+    <Generatedon>23/06/2023 - 14:21:23</Generatedon>
+    <Parser>MultiReportParser (3x OpenCoverParser)</Parser>
+    <Assemblies>1</Assemblies>
+    <Classes>1</Classes>
+    <Files>1</Files>
+    <Coveredlines>41</Coveredlines>
+    <Uncoveredlines>13</Uncoveredlines>
+    <Coverablelines>54</Coverablelines>
+    <Totallines>92</Totallines>
+    <Linecoverage>75.9</Linecoverage>
+    <Coveredbranches>0</Coveredbranches>
+    <Totalbranches>0</Totalbranches>
+  </Summary>
+  <Coverage>
+    <Assembly name="Assembly-CSharp" classes="1" coverage="75.9" coveredlines="41" coverablelines="54" totallines="92" branchcoverage="" coveredbranches="0" totalbranches="0">
+      <Class name="ModelRotationController" coverage="75.9" coveredlines="41" coverablelines="54" totallines="92" branchcoverage="" coveredbranches="0" totalbranches="0" />
+    </Assembly>
+  </Coverage>
+</CoverageReport>

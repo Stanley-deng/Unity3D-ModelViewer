@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<coverage version="1.0" date="2023-06-23_14-06-43" tag="">
+  <assembly name="Assembly-CSharp">
+    <class name="ModelRotationController" coveredlines="0" coverablelines="54" totallines="92" coveredbranches="0" totalbranches="0" />
+  </assembly>
+</coverage>
