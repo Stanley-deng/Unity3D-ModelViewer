@@ -10,14 +10,18 @@ using System.IO;
 
 public class Get3DModel : MonoBehaviour
 {
+    // this is a temp method as in the future Download3DModel should be called by the teams client 
     void Update() {
         if (Input.GetKeyDown("t")) {
             Download3DModel();
         }
     }
 
+    //public void Download3DModel(string hid)
     public void Download3DModel()
     {
+        //string url = $"https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/{hid}/download";
+        // current hardcoded url    
         string url = "https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/1867f18b7783921f6d80ab30020596c6/download";
         string downloadPath = "downloaded-file.glb";
 
@@ -43,7 +47,7 @@ public class Get3DModel : MonoBehaviour
             FileInfo fileInfo = new FileInfo(persistentPath);
             Debug.Log($"File path: {fileInfo.FullName}");
             Debug.Log($"File size: {fileInfo.Length} bytes");
-            ConvertGLBToString(persistentPath);
+            ConvertGLBToString(persistentPath); // for debugging purposes, shoudl be removed in the future  
         }
         else
         {
@@ -51,7 +55,7 @@ public class Get3DModel : MonoBehaviour
         }
     }
 
-    // for debugging purposes
+    // for debugging purposes, shoudl be removed in the future  
     private void ConvertGLBToString(string filePath)
     {
         if (File.Exists(filePath))
