@@ -8,10 +8,13 @@ using System;
 public class ModelRotationController : MonoBehaviour {
     // Config
     [SerializeField] float speed = 0.2f;
-    [SerializeField] Vector3 defaultRotation = Vector3.zero;
+    [SerializeField] UnityEngine.Vector3 defaultRotation = Vector3.zero;
 
     // Params
     bool isRotating = false;
+
+    Vector3 mPrevPos = Vector3.zero;
+    Vector3 mPosDelta = Vector3.zero;
 
 
     // Cache
@@ -59,6 +62,13 @@ public class ModelRotationController : MonoBehaviour {
 
     }
 
+    public void DragRotate(Vector3 delta) {
+
+        delta = Quaternion.AngleAxis(-90, Vector3.forward) * delta;
+
+        StartCoroutine(Rotate(delta));
+    }
+
     private IEnumerator Rotate(Vector3 v) {
         isRotating = true;
         Tween myTween = transform.DORotate(v, speed, RotateMode.WorldAxisAdd).SetRelative();
@@ -73,6 +83,7 @@ public class ModelRotationController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        // 90 Degree Rotation Handling
         if (Input.GetKeyDown("w")) {
             Rotate90("up");
         } else if (Input.GetKeyDown("s")) {
@@ -88,5 +99,13 @@ public class ModelRotationController : MonoBehaviour {
         } else if (Input.GetKeyDown("space")) {
             ResetRotation();
         }
+
+        // Click and Drag Handling
+        if (Input.GetMouseButton(0)) {
+            mPosDelta = Input.mousePosition - mPrevPos;
+            DragRotate(mPosDelta);
+        }
+
+        mPrevPos = Input.mousePosition;
     }
 }
