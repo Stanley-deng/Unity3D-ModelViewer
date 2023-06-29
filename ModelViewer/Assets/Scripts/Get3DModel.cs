@@ -8,8 +8,11 @@ using System;
 using UnityEngine.Networking;
 using System.IO;
 
+//using Siccity.GLTFUtility;
+
 public class Get3DModel : MonoBehaviour
-{
+{       
+
     // this is a temp method as in the future Download3DModel should be called by the teams client 
     void Update() {
         if (Input.GetKeyDown("t")) {
@@ -29,7 +32,7 @@ public class Get3DModel : MonoBehaviour
     }
 
     private IEnumerator DownloadFile(string url, string filePath)
-    {
+    {       
         UnityWebRequest webRequest = UnityWebRequest.Get(url);
 
         yield return webRequest.SendWebRequest();
@@ -39,15 +42,18 @@ public class Get3DModel : MonoBehaviour
             byte[] content = webRequest.downloadHandler.data;
 
             string persistentPath = Path.Combine(Application.persistentDataPath, filePath);
+            // string persistentPath = "./Assets/Models";
             File.WriteAllBytes(persistentPath, content);
 
             Debug.Log("File downloaded successfully.");
+
+            //LoadModel(persistentPath);
 
             // Display the file path and file size
             FileInfo fileInfo = new FileInfo(persistentPath);
             Debug.Log($"File path: {fileInfo.FullName}");
             Debug.Log($"File size: {fileInfo.Length} bytes");
-            ConvertGLBToString(persistentPath); // for debugging purposes, shoudl be removed in the future  
+            ConvertGLBToString(persistentPath); // for debugging purposes, should be removed in the future  
         }
         else
         {
@@ -55,7 +61,7 @@ public class Get3DModel : MonoBehaviour
         }
     }
 
-    // for debugging purposes, shoudl be removed in the future  
+    // for debugging purposes, should be removed in the future  
     private void ConvertGLBToString(string filePath)
     {
         if (File.Exists(filePath))
@@ -69,4 +75,28 @@ public class Get3DModel : MonoBehaviour
             Debug.LogError("GLB file not found: " + filePath);
         }
     }
+    
+    // public GameObject model = null; //The model itself
+    // private List<Transform> segmentTransforms; 
+    // public List<GameObject> segments{get; set;} //The children of the model (ie, its segments)
+    // public Vector3 centrePos{get; protected set;} //how the model should be positioned relative to its parent
+    // public Quaternion centreRot{get; protected set;} //how the model should be orientated relative to its parent
+    
+    // async void LoadModel(string filePath) {
+    //     Debug.Log("Loading model...");
+    //     byte[] data = File.ReadAllBytes(filePath);
+    //     var gltf = new GLTFast.GltfImport();
+    //     bool success = await gltf.LoadGltfBinary(
+    //         data, 
+    //         // The URI of the original data is important for resolving relative URIs within the glTF
+    //         new Uri(filePath)
+    //         );
+    //     if (success) {
+    //         Debug.Log("Model loaded successfully.");
+    //         //success = await gltf.InstantiateMainSceneAsync(transform);
+    //     }
+    // }
+    //void LoadModel(string filepath) {
+        //GameObject result = Importer.LoadFromFile(filepath);
+    //}
 }
