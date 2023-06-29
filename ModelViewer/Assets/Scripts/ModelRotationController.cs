@@ -13,12 +13,16 @@ public class ModelRotationController : MonoBehaviour {
     // Config
     [SerializeField] float speed = 0.2f;
     [SerializeField] UnityEngine.Vector3 defaultRotation = Vector3.zero;
+    [SerializeField] public GameObject target;
 
     // Params
     bool isRotating = false;
 
     Vector3 mPrevPos = Vector3.zero;
     Vector3 mPosDelta = Vector3.zero;
+
+    Transform Transform { get { return target.transform; } }
+
 
 
     // Cache
@@ -28,12 +32,12 @@ public class ModelRotationController : MonoBehaviour {
     private static extern void JSConsoleLog(string str);
 
     public void ResetRotation() {
-        transform.DORotate(defaultRotation, speed, RotateMode.FastBeyond360);
+        Transform.DORotate(defaultRotation, speed, RotateMode.FastBeyond360);
     }
 
     public void SyncRotation(string jsonRotation) {
         var targetRotation = JsonUtility.FromJson<Vector3>(jsonRotation);
-        transform.DORotate(targetRotation, speed, RotateMode.FastBeyond360);
+        Transform.DORotate(targetRotation, speed, RotateMode.FastBeyond360);
 
         float[] e = new float[] { targetRotation.x, targetRotation.y, targetRotation.z };
     }
@@ -75,11 +79,11 @@ public class ModelRotationController : MonoBehaviour {
 
     private IEnumerator Rotate(Vector3 v) {
         isRotating = true;
-        Tween myTween = transform.DORotate(v, speed, RotateMode.WorldAxisAdd).SetRelative();
+        Tween myTween = Transform.DORotate(v, speed, RotateMode.WorldAxisAdd).SetRelative();
         yield return myTween.WaitForCompletion();
         isRotating = false;
 
-        Vector3 r = transform.localEulerAngles;
+        Vector3 r = Transform.localEulerAngles;
         float[] e = new float[] { r.x, r.y, r.z };
         UpdateCurrentRotation(r.x, r.y, r.z);
     }
