@@ -103,7 +103,7 @@ public class ModelRotationController : MonoBehaviour {
         } else if (Input.GetKeyDown("q")) {
             Rotate90("clock");
         } else if (Input.GetKeyDown("e")) {
-            Rotate90("cclock");
+            Rotate90("cClock");
         } else if (Input.GetKeyDown("space")) {
             ResetRotation();
         }
