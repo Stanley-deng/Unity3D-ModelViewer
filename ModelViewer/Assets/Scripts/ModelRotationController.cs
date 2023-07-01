@@ -26,10 +26,10 @@ public class ModelRotationController : MonoBehaviour {
 
 
     // Cache
-    [DllImport("__Internal")]
-    private static extern int UpdateCurrentRotation(float x, float y, float z);
-    [DllImport("__Internal")]
-    private static extern void JSConsoleLog(string str);
+    //[DllImport("__Internal")]
+    //private static extern int UpdateCurrentRotation(float x, float y, float z);
+    //[DllImport("__Internal")]
+    //private static extern void JSConsoleLog(string str);
 
     public void ResetRotation() {
         Transform.DORotate(defaultRotation, speed, RotateMode.FastBeyond360);
@@ -85,7 +85,7 @@ public class ModelRotationController : MonoBehaviour {
 
         Vector3 r = Transform.localEulerAngles;
         float[] e = new float[] { r.x, r.y, r.z };
-        UpdateCurrentRotation(r.x, r.y, r.z);
+        //UpdateCurrentRotation(r.x, r.y, r.z);
     }
 
 
@@ -103,7 +103,7 @@ public class ModelRotationController : MonoBehaviour {
         } else if (Input.GetKeyDown("q")) {
             Rotate90("clock");
         } else if (Input.GetKeyDown("e")) {
-            Rotate90("cclock");
+            Rotate90("cClock");
         } else if (Input.GetKeyDown("space")) {
             ResetRotation();
         }

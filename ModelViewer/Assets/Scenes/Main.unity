@@ -306,7 +306,6 @@ GameObject:
   m_Component:
   - component: {fileID: 926056459}
   - component: {fileID: 926056460}
-  - component: {fileID: 926056462}
   - component: {fileID: 926056461}
   m_Layer: 0
   m_Name: Target Manager
@@ -344,6 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e570685a94514b488f2d52308d25a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelScale: 0.03
 --- !u!114 &926056461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,19 +359,6 @@ MonoBehaviour:
   speed: 0.2
   defaultRotation: {x: 0, y: 0, z: 0}
   target: {fileID: 1723240721}
---- !u!114 &926056462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 926056458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a73e5d2d1414c24982d369dec16692d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modelScale: 0.03
 --- !u!1 &1711666995
 GameObject:
   m_ObjectHideFlags: 0
