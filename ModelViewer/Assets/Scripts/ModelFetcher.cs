@@ -4,15 +4,16 @@ using System;
 
 using UnityEngine.Networking;
 using System.IO;
-using Siccity.GLTFUtility;
+using Dummiesman;
 
 public class ModelFetcher : MonoBehaviour {
     // Config
     [SerializeField] float modelScale = 0.03f;
 
     // Params
-    String fileName = "test.glb";
-    String persistentPath;
+    string fileName;
+    string persistentPath;
+    string fullPath;
 
 
     // Cache
@@ -29,13 +30,14 @@ public class ModelFetcher : MonoBehaviour {
         //string url = $"https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/{hid}/download";
         //fileName = hid
         // current hardcoded url    
-        string url = "https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/04bcb170b8c9846c1830a29b4b465bbd/download";
-   
+        string url = "https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/070576dc360a3621a2c1e256b4118a71/download";
+        fileName = "test.obj";
+        fullPath = Path.Combine(persistentPath, fileName);
+
         StartCoroutine(DownloadFile(url));
     }
 
     private IEnumerator DownloadFile(string url) {
-        String fullPath = Path.Combine(persistentPath, fileName);
 
         UnityWebRequest webRequest = UnityWebRequest.Get(url);
 
@@ -70,10 +72,10 @@ public class ModelFetcher : MonoBehaviour {
     }
 
     public void CreateObject() {
-        String fullPath = Path.Combine(persistentPath, fileName);
+        string fullPath = Path.Combine(persistentPath, fileName);
 
         // Load the GLB file from the Resources folder
-        GameObject targetModel = Importer.LoadFromFile(fullPath);
+        GameObject targetModel = new OBJLoader().Load(fullPath);
 
         // Check if the Model was loaded successfully
         if (targetModel == null) {
@@ -95,6 +97,7 @@ public class ModelFetcher : MonoBehaviour {
         // Set this as Parent of Model
         targetModel.transform.parent = transform;
     }
+
 
     // this is a temp method as in the future Download3DModel should be called by the teams client 
     void Update() {
