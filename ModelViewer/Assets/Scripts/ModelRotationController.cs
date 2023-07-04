@@ -26,16 +26,16 @@ public class ModelRotationController : MonoBehaviour {
 
 
     // Cache
-    //[DllImport("__Internal")]
-    //private static extern int UpdateCurrentRotation(float x, float y, float z);
-    //[DllImport("__Internal")]
-    //private static extern void JSConsoleLog(string str);
+    [DllImport("__Internal")]
+    private static extern int SyncRotation(float x, float y, float z);
+    [DllImport("__Internal")]
+    private static extern void JSConsoleLog(string str);
 
     public void ResetRotation() {
         Transform.DORotate(defaultRotation, speed, RotateMode.FastBeyond360);
     }
 
-    public void SyncRotation(string jsonRotation) {
+    public void UpdateRotation(string jsonRotation) {
         var targetRotation = JsonUtility.FromJson<Vector3>(jsonRotation);
         Transform.DORotate(targetRotation, speed, RotateMode.FastBeyond360);
 
@@ -85,7 +85,10 @@ public class ModelRotationController : MonoBehaviour {
 
         Vector3 r = Transform.localEulerAngles;
         float[] e = new float[] { r.x, r.y, r.z };
-        //UpdateCurrentRotation(r.x, r.y, r.z);
+
+        try {
+            SyncRotation(r.x, r.y, r.z);
+        } catch { }
     }
 
 
