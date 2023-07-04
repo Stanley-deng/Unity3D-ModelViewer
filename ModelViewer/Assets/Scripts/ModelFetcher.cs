@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 using System.IO;
 using Dummiesman;
 using System.Runtime.InteropServices;
-using Palmmedia.ReportGenerator.Core.Reporting.Builders.Rendering;
 
 public class ModelFetcher : MonoBehaviour {
     // Config
