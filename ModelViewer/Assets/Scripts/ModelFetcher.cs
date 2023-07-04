@@ -5,6 +5,8 @@ using System;
 using UnityEngine.Networking;
 using System.IO;
 using Dummiesman;
+using System.Runtime.InteropServices;
+using Palmmedia.ReportGenerator.Core.Reporting.Builders.Rendering;
 
 public class ModelFetcher : MonoBehaviour {
     // Config
@@ -15,23 +17,39 @@ public class ModelFetcher : MonoBehaviour {
     string persistentPath;
     string fullPath;
 
+    string hid;
+
 
     // Cache
     ModelRotationController controller;
+
+    //JS Interface
+    [DllImport("__Internal")]
+    private static extern int SyncDownload(string pHid);
+    [DllImport("__Internal")]
+    private static extern int SyncLoad(string pHid);
 
     public void Start() {
         controller = GetComponent<ModelRotationController>();
         persistentPath = Application.persistentDataPath;
         Debug.Log(persistentPath);
+
+        //Placeholder Hardcode
+        hid = "070576dc360a3621a2c1e256b4118a71";
     }
 
-    //public void Download3DModel(string hid)
-    public void Download3DModel() {
-        //string url = $"https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/{hid}/download";
-        //fileName = hid
-        // current hardcoded url    
-        string url = "https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/070576dc360a3621a2c1e256b4118a71/download";
-        fileName = "test.obj";
+    public void Download3DModel(string pHid = null) {
+        // Check hid argument and update
+        if (pHid != null)
+            hid = pHid;
+
+        // Sync this action through LiveShare
+        try {
+            SyncDownload(hid);
+        } catch { }
+
+        string url = $"https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/{hid}/download"; 
+        fileName = $"{hid}.obj";
         fullPath = Path.Combine(persistentPath, fileName);
 
         StartCoroutine(DownloadFile(url));
@@ -54,24 +72,26 @@ public class ModelFetcher : MonoBehaviour {
             FileInfo fileInfo = new FileInfo(fullPath);
             Debug.Log($"File path: {fileInfo.FullName}");
             Debug.Log($"File size: {fileInfo.Length} bytes");
-            ConvertGLBToString(fullPath); // for debugging purposes, should be removed in the future  
         } else {
             Debug.Log($"Failed to download file. Error: {webRequest.error}");
         }
     }
 
-    // for debugging purposes, should be removed in the future  
-    private void ConvertGLBToString(string filePath) {
-        if (File.Exists(filePath)) {
-            byte[] glbBytes = File.ReadAllBytes(filePath);
-            string glbString = Convert.ToBase64String(glbBytes);
-            Debug.Log("GLB length as Base64 string:\n" + glbString.Length.ToString());
-        } else {
-            Debug.LogError("GLB file not found: " + filePath);
-        }
-    }
+    
 
-    public void CreateObject() {
+    public void LoadModel(string pHid = null) {
+        // Check hid argument and update
+        if (pHid != null)
+            hid = pHid;
+
+        // Sync this action through LiveShare
+        try {
+            SyncLoad(hid);
+        } catch { }
+
+        // Update filename to current hid
+        fileName = $"{hid}.obj";
+
         string fullPath = Path.Combine(persistentPath, fileName);
 
         // Load the GLB file from the Resources folder
@@ -82,8 +102,6 @@ public class ModelFetcher : MonoBehaviour {
             Debug.LogError("Failed to load object from Resources folder.");
             return;
         }
-
-
 
         // Destroy Current Target Model
         Destroy(GameObject.Find("Target Model"));
@@ -105,7 +123,7 @@ public class ModelFetcher : MonoBehaviour {
             Download3DModel();
         }
         if (Input.GetKeyDown("y")) {
-            CreateObject();
+            LoadModel();
         }
     }
 }
