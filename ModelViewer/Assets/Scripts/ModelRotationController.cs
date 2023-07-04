@@ -4,7 +4,6 @@ using UnityEngine;
 using DG.Tweening;
 using System.Runtime.InteropServices;
 using System;
-using System.Security.Cryptography;
 
 //using UnityEngine.Networking;
 //using System.IO;
