@@ -86,9 +86,9 @@ public class ModelRotationController : MonoBehaviour {
         Vector3 r = Transform.localEulerAngles;
         float[] e = new float[] { r.x, r.y, r.z };
 
-        try {
-            SyncRotation(r.x, r.y, r.z);
-        } catch { }
+        //try {
+            //SyncRotation(r.x, r.y, r.z);
+        //} catch { }
     }
 
 
