@@ -63,38 +63,6 @@ public class ModelFetcher : MonoBehaviour {
 
     private IEnumerator DownloadFile(string url) {
 
-        // Version 1: Using UnityWebRequest for progress bar
-        // UnityWebRequest webRequest = UnityWebRequest.Get(url);
-
-        // while (!webRequest.isDone) {
-        //     float progress = webRequest.downloadProgress;
-        //     ProgressBar.fillAmount = webRequest.downloadProgress*-1;
-        //     Debug.Log($"download progress: {progress}");
-        //     yield return webRequest.SendWebRequest();
-        // }
-        
-        // Destroy(ProgressBar);
-        // Destroy(Background);
-        // Destroy(LoadingText);
-
-        // if (webRequest.result == UnityWebRequest.Result.Success) {
-        //     byte[] content = webRequest.downloadHandler.data;
-
-        //     File.WriteAllBytes(fullPath, content);
-
-        //     Debug.Log("File downloaded successfully.");
-
-        //     // Display the file path and file size
-        //     FileInfo fileInfo = new FileInfo(fullPath);
-        //     Debug.Log($"File path: {fileInfo.FullName}");
-        //     Debug.Log($"File size: {fileInfo.Length} bytes");
-        // } else {
-        //     Debug.Log($"Failed to download file. Error: {webRequest.error}");
-        // }
-
-        // LoadModel();
-
-        // Version 2: Using hard code for progress bar
         UnityWebRequest webRequest = UnityWebRequest.Get(url);
         ProgressBar.fillAmount = 0.1f;
         yield return webRequest.SendWebRequest();
