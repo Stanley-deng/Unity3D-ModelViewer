@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: UI Content
+    uniqueID: 3092398275
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
