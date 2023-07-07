@@ -1,4 +1,4 @@
-name: Unity Build
+name: Unity - Build
 
 on: 
   push:
@@ -56,6 +56,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: WebGL
+          projectPath: ./ModelViewer/
 
       # Output
       - uses: actions/upload-artifact@v2
