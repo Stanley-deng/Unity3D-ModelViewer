@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System;
 
 using UnityEngine.Networking;
@@ -8,8 +10,13 @@ using Dummiesman;
 using System.Runtime.InteropServices;
 
 public class ModelFetcher : MonoBehaviour {
+
     // Config
     [SerializeField] float modelScale = 0.03f;
+    //[SerializeField] public GameObject LoadingScreen;
+    [SerializeField] Image ProgressBar;
+    [SerializeField] Image Background;
+    [SerializeField] GameObject LoadingText;
 
     // Params
     string fileName;
@@ -43,9 +50,9 @@ public class ModelFetcher : MonoBehaviour {
             hid = pHid;
 
         // Sync this action through LiveShare
-        try {
-            SyncDownload(hid);
-        } catch { }
+        // try {
+        //     SyncDownload(hid);
+        // } catch { }
 
         string url = $"https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/{hid}/download"; 
         fileName = $"{hid}.obj";
@@ -57,23 +64,32 @@ public class ModelFetcher : MonoBehaviour {
     private IEnumerator DownloadFile(string url) {
 
         UnityWebRequest webRequest = UnityWebRequest.Get(url);
-
+        ProgressBar.fillAmount = 0.1f;
         yield return webRequest.SendWebRequest();
+        ProgressBar.fillAmount = 0.2f;
 
         if (webRequest.result == UnityWebRequest.Result.Success) {
             byte[] content = webRequest.downloadHandler.data;
-
+            ProgressBar.fillAmount = 0.4f;
             File.WriteAllBytes(fullPath, content);
-
+            ProgressBar.fillAmount = 0.6f;
             Debug.Log("File downloaded successfully.");
 
             // Display the file path and file size
             FileInfo fileInfo = new FileInfo(fullPath);
+            ProgressBar.fillAmount = 0.8f;
             Debug.Log($"File path: {fileInfo.FullName}");
             Debug.Log($"File size: {fileInfo.Length} bytes");
         } else {
             Debug.Log($"Failed to download file. Error: {webRequest.error}");
         }
+
+        LoadModel();
+        ProgressBar.fillAmount = 1.0f;
+
+        Destroy(ProgressBar);
+        Destroy(Background);
+        Destroy(LoadingText);
     }
 
     
@@ -84,16 +100,16 @@ public class ModelFetcher : MonoBehaviour {
             hid = pHid;
 
         // Sync this action through LiveShare
-        try {
-            SyncLoad(hid);
-        } catch { }
+        // try {
+        //     SyncLoad(hid);
+        // } catch { }
 
         // Update filename to current hid
         fileName = $"{hid}.obj";
 
         string fullPath = Path.Combine(persistentPath, fileName);
 
-        // Load the GLB file from the Resources folder
+        // Load the OBJ file from the Resources folder
         GameObject targetModel = new OBJLoader().Load(fullPath);
 
         // Check if the Model was loaded successfully
