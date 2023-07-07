@@ -111,7 +111,7 @@ public class ModelRotationController : MonoBehaviour {
             ResetRotation();
         }
 
-        // Click and Drag Handling
+        //Click and Drag Handling
         if (Input.GetMouseButton(0)) {
             mPosDelta = Input.mousePosition - mPrevPos;
             DragRotate(mPosDelta);
