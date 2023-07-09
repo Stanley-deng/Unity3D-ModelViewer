@@ -34,8 +34,8 @@ jobs:
       # Cache
       - uses: actions/cache@v2
         with:
-          path: ./ModelViewer/Library
-          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          path: ModelViewer/Library
+          key: Library-${{ hashFiles('ModelViewer/Assets/**', 'ModelViewer/Packages/**', 'ModelViewer/ProjectSettings/**') }}
           restore-keys: |
             Library-
 
