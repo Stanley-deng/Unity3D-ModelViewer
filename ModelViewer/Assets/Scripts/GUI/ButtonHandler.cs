@@ -6,44 +6,52 @@ using TMPro;
 
 public class ButtonHandler : MonoBehaviour {
     // Config
+    [SerializeField] ModelRotationController controller;
+
     [SerializeField] WaypointButton waypointButtonPrefab;
     [SerializeField] OverwriteDialog overwriteDialogPrefab;
+    [SerializeField] DeleteDialogue deleteDialogPrefab;
     [SerializeField] Button addButtonPrefab;
     [SerializeField] Button saveButton;
+    [SerializeField] Button deleteButton;
 
     [SerializeField] int maxWaypoints;
     
 
     // Params
     bool saveActive = false;
-    int waypointCount = 0;
     int currentWaypoint = 0;
+
+    OverwriteDialog overwriteDialog;
     Button addButton;
+    List<WaypointButton> waypoints = new List<WaypointButton>();
 
 
-    private void SetSaveActive(bool state) {
+    public void SetSaveActive(bool state) {
         saveActive = state;
 
         if (saveActive) {
             saveButton.GetComponent<Image>().color = Color.yellow;
+            // Spawn an add Button
+            SpawnAddButton();
         } else {
             saveButton.GetComponent<Image>().color = Color.white;
+            // Destroy the current Add Button if it exists
+            if (addButton) {
+                Destroy(addButton.gameObject);
+                addButton=null;
+            }
+            // Destroy the current Overwrite Dialog if it exists
+            if (overwriteDialog) {
+                Destroy(overwriteDialog.gameObject);
+                overwriteDialog = null;
+            }
         }
     }
 
-    public void OnSaveButtonPressed() {
-        // If Save mode is active, cancel it
-        if (saveActive) {
-            SetSaveActive(false);
-            Destroy(GameObject.Find($"Add {waypointCount + 1}"));
-            return;
-        }
-
-        // Activate the Save mode state
-        SetSaveActive(true);
-
+    private void SpawnAddButton() {
         // Check if maxSaves is exceeded
-        if (waypointCount >= maxWaypoints) {
+        if (waypoints.Count >= maxWaypoints) {
             return;
         }
 
@@ -53,48 +61,90 @@ public class ButtonHandler : MonoBehaviour {
 
         // Position Add Button relative to current waypoint count
         Vector3 posSpacing = new Vector3(0, -74, 0);
-        Vector3 finalPos = posSpacing * (waypointCount + 1);
+        Vector3 finalPos = posSpacing * (waypoints.Count + 1);
         addButton.transform.localPosition = finalPos;
 
         // Name Button
-        addButton.name = $"Add {waypointCount + 1}";
+        addButton.name = $"Add {waypoints.Count + 1}";
+    }
+
+    public void OnSaveButtonPressed() {
+        // If Save mode is active, cancel it
+        if (saveActive) {
+            SetSaveActive(false);
+            //Destroy(addButton.gameObject);
+            return;
+        }
+
+        // Activate the Save mode state
+        SetSaveActive(true);
     }
 
     public void OnWaypointButtonPressed(int index) {
         currentWaypoint = index;
 
         if (saveActive) {
-            HandleOverwrite();
+            OverwriteDialog();
+            return;
         }
 
-        Debug.Log(index);
+        controller.SetRotation(waypoints[index].Rotation);
+    }
+
+    public void OverwriteDialog() {
+        if (overwriteDialog) {
+            Destroy(overwriteDialog.gameObject);
+        }
+
+        WaypointButton parentWaypoint = waypoints[currentWaypoint];
+
+        OverwriteDialog newDialog = Instantiate(overwriteDialogPrefab);
+        newDialog.Index = waypoints.Count;
+        newDialog.transform.SetParent(parentWaypoint.transform);
+        newDialog.transform.position = parentWaypoint.transform.position + new Vector3(-111,7,0);
+        newDialog.name = $"Overwrite {currentWaypoint}";
+
+        overwriteDialog = newDialog;
     }
 
     public void HandleOverwrite() {
-        GameObject parentWaypoint = GameObject.Find($"Waypoint {currentWaypoint}");
-
-        OverwriteDialog newDialog = Instantiate(overwriteDialogPrefab);
-        newDialog.Index = waypointCount;
-        newDialog.transform.SetParent(parentWaypoint.transform);
-        newDialog.transform.position = parentWaypoint.transform.position + new Vector3(-111,50,0);
-        newDialog.name = $"Overwrite {currentWaypoint}";
+        // Set selected waypoint rotation to current rotation
+        waypoints[currentWaypoint].Rotation = controller.GetRotation();
     }
 
     public void OnAddButtonPressed() {
-        // Deactivate Save Mode
-        SetSaveActive(false);
-        // Increment Number of Waypoints
-        waypointCount += 1;
-
         // Replace Add Button by Waypoint
         WaypointButton newWaypoint = Instantiate(waypointButtonPrefab);
-        newWaypoint.Index = waypointCount;
-        newWaypoint.GetComponentInChildren<TMP_Text>().text = (waypointCount).ToString();
+        newWaypoint.Index = waypoints.Count;
+        newWaypoint.GetComponentInChildren<TMP_Text>().text = (waypoints.Count + 1).ToString();
         newWaypoint.transform.position = addButton.transform.position;
         newWaypoint.transform.SetParent(saveButton.transform);
-        newWaypoint.name = $"Waypoint {waypointCount}";
+        newWaypoint.name = $"Waypoint {waypoints.Count + 1}";
 
+        // Set Waypoint rotation to current rotation
+        newWaypoint.Rotation = controller.GetRotation();
 
-        Destroy(GameObject.Find($"Add {waypointCount}"));
+        // Add Waypoint to List
+        waypoints.Add(newWaypoint);
+
+        // Deactivate Save Mode
+        SetSaveActive(false);
+    }
+
+    public void OnDeleteButtonPressed() {
+        Button parentWaypoint = deleteButton;
+
+        DeleteDialogue newDialog = Instantiate(deleteDialogPrefab);
+        newDialog.transform.SetParent(parentWaypoint.transform);
+        newDialog.transform.position = parentWaypoint.transform.position + new Vector3(-170, 8, 0);
+        newDialog.name = $"Delete Dialogue";
+    }
+
+    public void HandleDeletion() {
+        foreach(var waypoint in waypoints) {
+            Destroy(waypoint.gameObject);
+        }
+
+        waypoints.Clear();
     }
 }

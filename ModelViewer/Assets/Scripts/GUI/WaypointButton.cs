@@ -10,8 +10,10 @@ public class WaypointButton : MonoBehaviour {
 
     // Params
     private int index;
+    private Vector3 rotation;
 
     public int Index { get => index; set => index = value; }
+    public Vector3 Rotation { get => rotation; set => rotation = value; }
 
     public void OnClick() {
         buttonHandler.OnWaypointButtonPressed(Index);
