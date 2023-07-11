@@ -120,7 +120,7 @@ public class ModelFetcher : MonoBehaviour {
 
         // Destroy Current Target Model
         Destroy(GameObject.Find("Target Model"));
-        controller.target = targetModel;
+        controller.Target = targetModel;
 
         // Set Model Properties
         targetModel.name = "Target Model";

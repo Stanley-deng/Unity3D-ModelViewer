@@ -12,8 +12,8 @@ public class ModelRotationController : MonoBehaviour {
 
     // Config
     [SerializeField] float speed = 0.2f;
-    [SerializeField] UnityEngine.Vector3 defaultRotation = Vector3.zero;
-    [SerializeField] public GameObject target;
+    [SerializeField] Vector3 defaultRotation = Vector3.zero;
+    [SerializeField] GameObject target;
 
     // Params
     bool isRotating = false;
@@ -21,7 +21,8 @@ public class ModelRotationController : MonoBehaviour {
     Vector3 mPrevPos = Vector3.zero;
     Vector3 mPosDelta = Vector3.zero;
 
-    Transform Transform { get { return target.transform; } }
+    Transform Transform { get { return Target.transform; } }
+    public GameObject Target { get => target; set => target = value; }
 
 
 
@@ -32,14 +33,23 @@ public class ModelRotationController : MonoBehaviour {
     private static extern void JSConsoleLog(string str);
 
     public void ResetRotation() {
-        Transform.DORotate(defaultRotation, speed, RotateMode.FastBeyond360);
+        Transform.DORotate(defaultRotation, speed, RotateMode.Fast);
     }
 
-    public void UpdateRotation(string jsonRotation) {
-        var targetRotation = JsonUtility.FromJson<Vector3>(jsonRotation);
-        Transform.DORotate(targetRotation, speed, RotateMode.FastBeyond360);
+    public Vector3 GetRotation() {
+        return Target.transform.eulerAngles;
+    }
 
-        float[] e = new float[] { targetRotation.x, targetRotation.y, targetRotation.z };
+    public void SetRotation(Vector3 targetRotation) {
+        Transform.DORotate(targetRotation, speed, RotateMode.Fast);
+    }
+
+    public void SetRotationJS(string jsonRotation) {
+        var targetRotation = JsonUtility.FromJson<Vector3>(jsonRotation);
+        Transform.DORotate(targetRotation, speed, RotateMode.Fast);
+
+        //float[] e = new float[] { targetRotation.x, targetRotation.y, targetRotation.z };
+        // Debug.Log(e);
     }
 
     public void Rotate90(string direction) {
@@ -71,7 +81,6 @@ public class ModelRotationController : MonoBehaviour {
     }
 
     public void DragRotate(Vector3 delta) {
-
         delta = Quaternion.AngleAxis(-90, Vector3.forward) * delta;
 
         StartCoroutine(Rotate(delta));
