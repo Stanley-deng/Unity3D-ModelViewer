@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class OverwriteDialog : MonoBehaviour {
+    // Config
+    [SerializeField] ButtonHandler buttonHandler;
 
     // Params
     private int index;
@@ -11,11 +13,14 @@ public class OverwriteDialog : MonoBehaviour {
 
     public void OnConfirmButtonPressed() {
         Debug.Log("Confirm Pressed");
+        buttonHandler.SetSaveActive(false);
+        buttonHandler.HandleOverwrite();
         Destroy(gameObject);
     }
 
     public void OnCancelButtonPressed() {
         Debug.Log("Cancel Pressed");
+        buttonHandler.SetSaveActive(false);
         Destroy(gameObject);
     }
 }
