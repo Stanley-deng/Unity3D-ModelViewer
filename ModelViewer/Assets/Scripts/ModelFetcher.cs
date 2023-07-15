@@ -42,7 +42,8 @@ public class ModelFetcher : MonoBehaviour {
         Debug.Log(persistentPath);
 
         //Placeholder Hardcode
-        hid = "b9eab3e46c4c694691730d7708799d6c";
+        //hid = "b9eab3e46c4c694691730d7708799d6c";
+        hid = "whole_body_demo";
     }
 
     public void Download3DModel(string pHid = null) {

@@ -1088,6 +1088,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 977430660}
   m_CullTransparentMesh: 1
+--- !u!1 &1423022277 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6651195241063406973, guid: 14c5efab664dde64883a83292db40bf5, type: 3}
+  m_PrefabInstance: {fileID: 33459199}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1423022281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423022277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41822ea5c82409145b991789342feea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 1711666998}
+  texture: {fileID: 2800000, guid: 820e3e0bf1876cc489f99a07964008ea, type: 3}
+  brushColor: {r: 1, g: 0, b: 0, a: 1}
+  brushSize: 10
+--- !u!64 &1423022282
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423022277}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3435136633698641610, guid: 14c5efab664dde64883a83292db40bf5, type: 3}
 --- !u!1 &1602994585
 GameObject:
   m_ObjectHideFlags: 0
