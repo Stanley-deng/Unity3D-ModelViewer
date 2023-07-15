@@ -951,7 +951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0834e9e0ab5134c7482141f8802ce736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 5
   defaultScale: {x: 250, y: 250, z: 250}
   target: {fileID: 1723240721}
 --- !u!1 &977430660

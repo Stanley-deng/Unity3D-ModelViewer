@@ -7,7 +7,7 @@ public class ModelScaleController : MonoBehaviour
 {
     // Config
     // The speed of scaler when using keys
-    [SerializeField] float speed = 10f;
+    [SerializeField] float speed = 5f;
     // The speed of scaler when using multi-touch
     // Default scale
     [SerializeField] Vector3 defaultScale = new Vector3(250f, 250f, 250f);
