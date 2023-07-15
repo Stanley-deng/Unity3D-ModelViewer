@@ -1,25 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public class ModelScaleController : MonoBehaviour
 {
     // Config
     // The speed of scaler when using keys
-    [SerializeField] float scaleSpeed = 1f;
+    [SerializeField] float speed = 10f;
     // The speed of scaler when using multi-touch
-    [SerializeField] float pinchSpeed = 0.5f;
     // Default scale
     [SerializeField] Vector3 defaultScale = new Vector3(250f, 250f, 250f);
 
     // Get the transform of target object
     public GameObject target;
     Transform Transform { get { return target.transform; } }
-
-
-    float mPrevY = 0f;
-    float mPosDelta = 0f;
-
 
     void ResetScale()
     {
@@ -35,29 +30,14 @@ public class ModelScaleController : MonoBehaviour
     void Update()
     {
         // Use keyboad to control the scale
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            ChangeScale(scaleSpeed);
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            ChangeScale(-scaleSpeed);
-        }
-        else if (Input.GetKey(KeyCode.R))
+    if (Input.GetKey(KeyCode.Space))
         {
             ResetScale();
         }
+    }
 
-        // Right click and move to control the scale
-        if (Input.GetMouseButton(1))
-        {
-            mPosDelta = Input.mousePosition.y - mPrevY;
-            ChangeScale(pinchSpeed * mPosDelta);
-        }
-
-        // Update previous position of mouse
-        mPrevY = Input.mousePosition.y;
-
+    void OnGUI() {
+        ChangeScale(speed * Input.mouseScrollDelta.y);
     }
 }
 

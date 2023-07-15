@@ -884,7 +884,6 @@ GameObject:
   - component: {fileID: 926056460}
   - component: {fileID: 926056461}
   - component: {fileID: 926056462}
-  - component: {fileID: 926056463}
   m_Layer: 0
   m_Name: Target Manager
   m_TagString: Untagged
@@ -952,22 +951,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0834e9e0ab5134c7482141f8802ce736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaleSpeed: 1
-  pinchSpeed: 0.5
+  speed: 10
   defaultScale: {x: 250, y: 250, z: 250}
   target: {fileID: 1723240721}
---- !u!114 &926056463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 926056458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a250e268552fed45a063d19b6eb3157, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &977430660
 GameObject:
   m_ObjectHideFlags: 0
