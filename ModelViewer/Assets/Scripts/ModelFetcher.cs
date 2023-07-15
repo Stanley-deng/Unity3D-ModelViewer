@@ -111,7 +111,6 @@ public class ModelFetcher : MonoBehaviour {
         string fullPath = Path.Combine(persistentPath, fileName);
 
         // Load the OBJ file from the Resources folder
-        // GameObject targetModel = new OBJLoader().Load(fullPath);
         byte[] data = File.ReadAllBytes(fullPath);
         var gltf = new GltfImport();
 
