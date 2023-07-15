@@ -6,8 +6,9 @@ using System;
 
 using UnityEngine.Networking;
 using System.IO;
-using Dummiesman;
 using System.Runtime.InteropServices;
+
+using GLTFast;
 
 public class ModelFetcher : MonoBehaviour {
 
@@ -41,7 +42,7 @@ public class ModelFetcher : MonoBehaviour {
         Debug.Log(persistentPath);
 
         //Placeholder Hardcode
-        hid = "070576dc360a3621a2c1e256b4118a71";
+        hid = "b9eab3e46c4c694691730d7708799d6c";
     }
 
     public void Download3DModel(string pHid = null) {
@@ -55,7 +56,7 @@ public class ModelFetcher : MonoBehaviour {
         // } catch { }
 
         string url = $"https://organsegmentation-storageaccessor-app.azurewebsites.net/api/v1/holograms/{hid}/download"; 
-        fileName = $"{hid}.obj";
+        fileName = $"{hid}.glb";
         fullPath = Path.Combine(persistentPath, fileName);
 
         StartCoroutine(DownloadFile(url));
@@ -94,7 +95,7 @@ public class ModelFetcher : MonoBehaviour {
 
     
 
-    public void LoadModel(string pHid = null) {
+    async void LoadModel(string pHid = null) {
         // Check hid argument and update
         if (pHid != null)
             hid = pHid;
@@ -105,29 +106,43 @@ public class ModelFetcher : MonoBehaviour {
         // } catch { }
 
         // Update filename to current hid
-        fileName = $"{hid}.obj";
+        fileName = $"{hid}.glb";
 
         string fullPath = Path.Combine(persistentPath, fileName);
 
         // Load the OBJ file from the Resources folder
-        GameObject targetModel = new OBJLoader().Load(fullPath);
+        // GameObject targetModel = new OBJLoader().Load(fullPath);
+        byte[] data = File.ReadAllBytes(fullPath);
+        var gltf = new GltfImport();
+
+        bool success = await gltf.LoadGltfBinary(
+            data, 
+            // The URI of the original data is important for resolving relative URIs within the glTF
+            new Uri(fullPath)
+            );
 
         // Check if the Model was loaded successfully
-        if (targetModel == null) {
+        if (success) {
+            Debug.Log("Success spawning model");
+            success = await gltf.InstantiateMainSceneAsync(transform);
+        }     
+        else {
             Debug.LogError("Failed to load object from Resources folder.");
             return;
         }
 
         // Destroy Current Target Model
         Destroy(GameObject.Find("Target Model"));
+
+        GameObject targetModel = GameObject.Find("world");
         controller.Target = targetModel;
 
-        // Set Model Properties
+        // // Set Model Properties
         targetModel.name = "Target Model";
         targetModel.transform.localScale *= modelScale;
 
 
-        // Set this as Parent of Model
+        // // Set this as Parent of Model
         targetModel.transform.parent = transform;
     }
 
