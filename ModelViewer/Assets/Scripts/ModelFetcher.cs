@@ -28,7 +28,8 @@ public class ModelFetcher : MonoBehaviour {
 
 
     // Cache
-    ModelRotationController controller;
+    ModelRotationController rotationController;
+    ModelScaleController scaleController;
 
     //JS Interface
     [DllImport("__Internal")]
@@ -37,12 +38,14 @@ public class ModelFetcher : MonoBehaviour {
     private static extern int SyncLoad(string pHid);
 
     public void Start() {
-        controller = GetComponent<ModelRotationController>();
+        rotationController = GetComponent<ModelRotationController>();
+        scaleController = GetComponent<ModelScaleController>();
         persistentPath = Application.persistentDataPath;
         Debug.Log(persistentPath);
 
         //Placeholder Hardcode
-        hid = "b9eab3e46c4c694691730d7708799d6c";
+        //hid = "b9eab3e46c4c694691730d7708799d6c";
+        hid = "whole_body_demo";
     }
 
     public void Download3DModel(string pHid = null) {
@@ -110,7 +113,7 @@ public class ModelFetcher : MonoBehaviour {
 
         string fullPath = Path.Combine(persistentPath, fileName);
 
-        // Load the OBJ file from the Resources folder
+        // Load the GLB file from the Resources folder
         byte[] data = File.ReadAllBytes(fullPath);
         var gltf = new GltfImport();
 
@@ -134,7 +137,8 @@ public class ModelFetcher : MonoBehaviour {
         Destroy(GameObject.Find("Target Model"));
 
         GameObject targetModel = GameObject.Find("world");
-        controller.Target = targetModel;
+        rotationController.Target = targetModel;
+        scaleController.Target = targetModel;
 
         // // Set Model Properties
         targetModel.name = "Target Model";

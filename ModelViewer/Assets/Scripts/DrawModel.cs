@@ -46,6 +46,8 @@ public class DrawModel : MonoBehaviour
 
                 // Apply the modified texture to the object
                 texture.Apply();
+                
+                
 
                 // Assign the updated texture to the object's material
                 renderer.material.mainTexture = texture;
