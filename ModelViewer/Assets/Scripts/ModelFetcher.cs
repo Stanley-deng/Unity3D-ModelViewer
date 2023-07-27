@@ -1,14 +1,17 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
-
 using UnityEngine.Networking;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
 using GLTFast;
+using PaintIn3D;
+
 
 public class ModelFetcher : MonoBehaviour {
 
@@ -19,11 +22,12 @@ public class ModelFetcher : MonoBehaviour {
     [SerializeField] Image Background;
     [SerializeField] GameObject LoadingText;
 
+    [SerializeField] Material[] paintMaterials;
+
     // Params
     string fileName;
     string persistentPath;
     string fullPath;
-
     string hid;
 
 
@@ -44,8 +48,8 @@ public class ModelFetcher : MonoBehaviour {
         Debug.Log(persistentPath);
 
         //Placeholder Hardcode
-        //hid = "b9eab3e46c4c694691730d7708799d6c";
-        hid = "whole_body_demo";
+        hid = "lung1"; 
+        //hid = "whole_body_demo";
     }
 
     public void Download3DModel(string pHid = null) {
@@ -136,17 +140,43 @@ public class ModelFetcher : MonoBehaviour {
         // Destroy Current Target Model
         Destroy(GameObject.Find("Target Model"));
 
-        GameObject targetModel = GameObject.Find("world");
+        GameObject targetModel = transform.GetChild(2).gameObject;
         rotationController.Target = targetModel;
         scaleController.Target = targetModel;
 
-        // // Set Model Properties
+        // Set Model Properties
         targetModel.name = "Target Model";
         targetModel.transform.localScale *= modelScale;
 
 
-        // // Set this as Parent of Model
-        targetModel.transform.parent = transform;
+        // Make Components of Model Paintable
+        MakePaintableParent(targetModel);
+    }
+
+    void MakePaintableParent(GameObject target) {
+        // Check if the target mesh has a valid UV Map
+        var uvs = new List<Vector2>();
+        target.transform.GetChild(0).GetComponent<MeshFilter>().mesh.GetUVs(0, uvs);
+        if (uvs.Count == 0) {
+            Debug.Log("Warning: Model does not contain a valid UV Map! Painting feature is disabled.");
+            return;
+        } Debug.Log("UVs Valid!");
+
+        foreach (Transform child in target.transform) {
+            MakePaintableChild(child.gameObject);
+        }
+
+        
+    }
+
+    void MakePaintableChild(GameObject target) {
+        // Change Material to be Paint Compatible
+        target.GetComponent<MeshRenderer>().material = paintMaterials[0];
+
+        target.AddComponent<P3dPaintable>();
+        target.AddComponent<P3dPaintableTexture>();
+        target.AddComponent<P3dMaterialCloner>();
+        target.AddComponent<MeshCollider>();
     }
 
 
