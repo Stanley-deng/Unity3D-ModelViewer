@@ -30,7 +30,6 @@ jobs:
           git lfs pull
           git add .
           git reset --hard
-
       # Cache
       - uses: actions/cache@v2
         with:
@@ -38,7 +37,6 @@ jobs:
           key: Library-${{ hashFiles('ModelViewer/Assets/**', 'ModelViewer/Packages/**', 'ModelViewer/ProjectSettings/**') }}
           restore-keys: |
             Library-
-
       # Test
 #       - name: Run tests
 #         uses: game-ci/unity-test-runner@v2
@@ -70,13 +68,20 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      # Load artifact from previous job
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: Build
+          path: build
+      - name: List files
+        run: ls -R
+        working-directory: build
+
+      # Upload to azure blob storage 
       - uses: bacongobbler/azure-blob-storage-upload@main
         with:
-          source_dir: ./ModelViewer/CodeCoverage
-          container_name: test
+          source_dir: build
+          container_name: model-viewer-build
           connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
-          extra_args: '--pattern *.tar.gz'
-          # WARNING: this will overwrite existing blobs in your blob storage
           overwrite: 'true'
-    
