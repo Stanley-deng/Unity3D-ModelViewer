@@ -84,4 +84,5 @@ jobs:
           source_dir: build
           container_name: model-viewer-build
           connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
+          extra_args: --content-encoding gzip
           overwrite: 'true'
