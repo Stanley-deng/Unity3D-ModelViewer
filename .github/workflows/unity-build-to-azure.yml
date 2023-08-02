@@ -70,23 +70,53 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      # Load artifact from previous job
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: azure/login@v1
         with:
-          name: Build
-          path: build
-      - name: List files
-        run: ls -R
-        working-directory: build
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Upload to azure blob storage 
-      - uses: bacongobbler/azure-blob-storage-upload@main
+      - name: Upload Build to blob storage
+        uses: azure/CLI@v1
         with:
-          source_dir: build
-          container_name: test-model-viewer-build
-          connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
-          extra_args: --content-encoding gzip
-          overwrite: 'true'
+          inlineScript: |
+              az storage blob upload-batch --destination test-model-viewer-build --account-name unityviewerbuild --destination-path WebGL/WebGL --source /build/Build --content-encoding gzip 
 
-      # update content-encoding 
+      - name: Upload StreamingAssets to blob storage
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+              az storage blob upload-batch --destination test-model-viewer-build --account-name unityviewerbuild --destination-path WebGL/WebGL --source /build/StreamingAssets
+
+      - name: Upload TemplateData to blob storage
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+              az storage blob upload-batch --destination test-model-viewer-build --account-name unityviewerbuild --destination-path WebGL/WebGL --source /build/TemplateData
+      
+      - name: Upload index to blob storage
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+              az storage blob upload -f /build/index.html --account-name unityviewerbuild --container-name test-model-viewer-build --name WebGL/WebGL/index.html
+
+  
+      # # Load artifact from previous job
+      # - uses: actions/checkout@v3
+      # - uses: actions/download-artifact@v3
+      #   with:
+      #     name: Build
+      #     path: build
+      # - name: List files
+      #   run: ls -R
+      #   working-directory: build
+
+      # # Upload to azure blob storage 
+      # - uses: bacongobbler/azure-blob-storage-upload@main
+      #   with:
+      #     source_dir: build
+      #     container_name: test-model-viewer-build
+      #     connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
+      #     extra_args: --content-encoding gzip
+      #     overwrite: 'true'
+
+      # # update content-encoding 
