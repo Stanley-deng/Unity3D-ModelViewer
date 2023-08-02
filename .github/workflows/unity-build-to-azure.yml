@@ -86,3 +86,5 @@ jobs:
           connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
           extra_args: --content-encoding gzip
           overwrite: 'true'
+
+      # update content-encoding 
