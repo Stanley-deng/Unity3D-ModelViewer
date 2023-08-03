@@ -70,6 +70,16 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      # Load artifact from previous job
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: Build
+          path: build
+      - name: List files
+        run: ls -R
+        working-directory: build
+
       - uses: actions/checkout@v3
       - uses: azure/login@v1
         with:
