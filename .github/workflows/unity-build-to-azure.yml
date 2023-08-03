@@ -89,7 +89,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-              az storage blob upload-batch --destination test-model-viewer-build --account-name unityviewerbuild --destination-path WebGL/WebGL --source build --content-encoding gzip 
+              az storage blob upload-batch --destination test-model-viewer-build --account-name unityviewerbuild --destination-path WebGL/WebGL --source ${{ github.workspace }}/build/WebGL/WebGL/Build --content-encoding gzip 
 
       # - name: Upload StreamingAssets to blob storage
       #   uses: azure/CLI@v1
