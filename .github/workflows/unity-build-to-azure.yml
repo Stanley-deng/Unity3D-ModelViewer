@@ -62,7 +62,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: Build
-          path: build
+          path: ${{ github.workspace }}/build
           
 # UPLOAD BUILD TO AZURE CONTAINER
   upload:
@@ -76,20 +76,24 @@ jobs:
         with:
           name: Build
           path: build
+  
+      - uses: azure/login@v1
+        with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: List files
         run: ls -R
         working-directory: build
 
-      - uses: actions/checkout@v3
-      - uses: azure/login@v1
-        with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: List files
+        run: ls -R
+        working-directory: ${{ github.workspace }}
 
       - name: Upload Build to blob storage
         uses: azure/CLI@v1
         with:
           inlineScript: |
-              az storage blob upload-batch --destination test-model-viewer-build --account-name unityviewerbuild --destination-path WebGL/WebGL --source ../build --content-encoding gzip 
+              az storage blob upload-batch --destination test-model-viewer-build --account-name unityviewerbuild --destination-path WebGL/WebGL --source ${{ github.workspace }} --content-encoding gzip 
 
       # - name: Upload StreamingAssets to blob storage
       #   uses: azure/CLI@v1
